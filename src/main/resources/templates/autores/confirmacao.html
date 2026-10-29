@@ -1,0 +1,42 @@
+<!doctype html>
+<html xmlns="...">
+  <head>
+    <title>Confirmação</title>
+  </head>
+  <body>
+    <h1>Autor cadastrado!</h1>
+
+    <nav>
+        <a th:href="@{/livros}">
+            Livros
+        </a>
+        <a th:href="@{/autores}">
+            Autores
+        </a>
+        <a th:href="@{/categorias}">
+            Categorias
+        </a>
+        <a th:href="@{/usuarios}">
+            Usuários
+        </a>
+        <a th:href="@{/emprestimos}">
+            Empréstimos
+        </a>
+    </nav>
+
+    <p>
+      Nome:
+      <span th:text="${autor.nome}"></span>
+    </p>
+
+    <p>
+      Nacionalidade:
+      <span th:text="${autor.nacionalidade}"></span>
+    </p>
+
+    <p>
+      Obras Publicadas:
+      <span th:text="${autor.obrasPublicadas}"></span>
+    </p>
+  </body>
+</html>
