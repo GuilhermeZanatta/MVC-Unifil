@@ -1,21 +1,26 @@
 package com.ger.biblioteca.biblioteca.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Autor {
     private String nome;
     private String nacionalidade;
-    private String obrasPublicadas;
+    private List<Long> livrosPublicados = new ArrayList<>();
+    private Long id;
 
     public Autor() {
     }
 
-    public Autor(String nome, String nacionalidade, String obrasPublicadas) {
+    public Autor(String nome, String nacionalidade, List<Long> livrosPublicados) {
         this.nome = nome;
         this.nacionalidade = nacionalidade;
-        this.obrasPublicadas = obrasPublicadas;
+        this.livrosPublicados = livrosPublicados;
+        this.id = null;
     }
 
-    public String getObrasPublicadas() {
-        return obrasPublicadas;
+    public List<Long> getLivrosPublicados() {
+        return livrosPublicados;
     }
 
     public String getNome() {
@@ -26,8 +31,8 @@ public class Autor {
         return nacionalidade;
     }
 
-    public void setObrasPublicadas(String obrasPublicadas) {
-        this.obrasPublicadas = obrasPublicadas;
+    public void setLivrosPublicados(List<Long> livrosPublicados) {
+        this.livrosPublicados = livrosPublicados;
     }
 
     public void setNome(String nome) {
@@ -36,5 +41,13 @@ public class Autor {
 
     public void setNacionalidade(String nacionalidade) {
         this.nacionalidade = nacionalidade;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

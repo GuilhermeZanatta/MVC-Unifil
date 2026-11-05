@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="...">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Biblioteca</title>
 </head>
@@ -23,6 +23,32 @@
         </a>
     </nav>
 
-    <a th:href="@{/livros/novo}">Cadastrar Livro</a>
+    <p><a th:href="@{/livros/novo}">Cadastrar Livro</a></p>
+
+    <h2>Livros cadastrados</h2>
+    <p th:if="${#lists.isEmpty(livros)}">Nenhum livro cadastrado.</p>
+    <table th:unless="${#lists.isEmpty(livros)}" border="1">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>ISBN</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="livro : ${livros}">
+                <td th:text="${livro.titulo}"></td>
+                <td th:text="${livro.autor}"></td>
+                <td th:text="${livro.isbn}"></td>
+                <td>
+                    <a th:href="@{/livros/editar/{id}(id=${livro.id})}">Editar</a>
+                    <form th:action="@{/livros/excluir/{id}(id=${livro.id})}" method="post">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

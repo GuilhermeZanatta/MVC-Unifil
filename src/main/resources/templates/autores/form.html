@@ -1,10 +1,10 @@
 <!doctype html>
-<html xmlns="...">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>Cadastro</title>
   </head>
   <body>
-    <h1>Cadastrar Autor</h1>
+    <h1 th:text="${autor.id == null} ? 'Cadastrar Autor' : 'Editar Autor'">Cadastrar Autor</h1>
 
     <nav>
         <a th:href="@{/livros}">
@@ -24,7 +24,9 @@
         </a>
     </nav>
 
-    <form th:object="${autor}" action="/autores" method="post">
+    <form th:object="${autor}"
+          th:action="${autor.id == null} ? @{/autores} : @{/autores/editar/{id}(id=${autor.id})}"
+          method="post">
       <label>Nome:</label>
 
       <input type="text" th:field="*{nome}" />
@@ -33,11 +35,15 @@
 
       <input type="text" th:field="*{nacionalidade}" />
 
-      <label>Obras Publicadas:</label>
+      <label for="livrosPublicados">Livros publicados (selecione vários):</label>
+      <select id="livrosPublicados" th:field="*{livrosPublicados}" multiple size="5">
+        <option th:each="livro : ${livros}"
+                th:value="${livro.id}"
+                th:text="${livro.titulo + ' - ' + livro.autor}"></option>
+      </select>
 
-      <input type="text" th:field="*{obrasPublicadas}" />
-
-      <button type="submit">Cadastrar</button>
+      <p th:if="${#lists.isEmpty(livros)}">Cadastre livros antes de associá-los ao autor.</p>
+      <button type="submit" th:text="${autor.id == null} ? 'Cadastrar' : 'Salvar'">Cadastrar</button>
     </form>
   </body>
 </html>

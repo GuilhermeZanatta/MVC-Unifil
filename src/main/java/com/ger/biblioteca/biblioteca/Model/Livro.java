@@ -4,6 +4,7 @@ public class Livro {
     private String titulo;
     private String autor;
     private String isbn;
+    private Long id;
 
     public Livro() {
     }
@@ -12,6 +13,7 @@ public class Livro {
         this.titulo = titulo;
         this.autor = autor;
         this.isbn = isbn;
+        this.id = null;
     }
     
     public String getTitulo() {
@@ -31,6 +33,14 @@ public class Livro {
     }
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }
