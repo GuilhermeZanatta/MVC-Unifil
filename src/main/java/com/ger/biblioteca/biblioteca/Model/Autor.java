@@ -1,26 +1,23 @@
 package com.ger.biblioteca.biblioteca.Model;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table (name = "autor")
 public class Autor {
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nome;
     private String nacionalidade;
-    private List<Long> livrosPublicados = new ArrayList<>();
-    private Long id;
 
     public Autor() {
     }
 
-    public Autor(String nome, String nacionalidade, List<Long> livrosPublicados) {
+    public Autor(String nome, String nacionalidade) {
         this.nome = nome;
         this.nacionalidade = nacionalidade;
-        this.livrosPublicados = livrosPublicados;
         this.id = null;
-    }
-
-    public List<Long> getLivrosPublicados() {
-        return livrosPublicados;
     }
 
     public String getNome() {
@@ -29,10 +26,6 @@ public class Autor {
 
     public String getNacionalidade() {
         return nacionalidade;
-    }
-
-    public void setLivrosPublicados(List<Long> livrosPublicados) {
-        this.livrosPublicados = livrosPublicados;
     }
 
     public void setNome(String nome) {

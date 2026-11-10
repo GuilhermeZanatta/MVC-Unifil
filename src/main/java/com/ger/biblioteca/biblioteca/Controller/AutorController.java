@@ -1,70 +1,46 @@
 package com.ger.biblioteca.biblioteca.Controller;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.ger.biblioteca.biblioteca.Model.Autor;
-import com.ger.biblioteca.biblioteca.Model.Livro;
-import com.ger.biblioteca.biblioteca.Service.BibliotecaDados;
+import com.ger.biblioteca.biblioteca.Repository.AutoresRepository;
+
 
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
 
-    private final BibliotecaDados dados;
+    private final AutoresRepository repository;
 
-    public AutorController(BibliotecaDados dados) {
-        this.dados = dados;
+    public AutorController(AutoresRepository repository) {
+        this.repository = repository;
     }
 
-    @GetMapping
-    public String inicio(Model model) {
-        Map<Long, List<Livro>> livrosPorAutor = new LinkedHashMap<>();
-        for (Autor autor : dados.getAutores()) {
-            List<Livro> livrosDoAutor = new ArrayList<>();
-            for (Livro livro : dados.getLivros()) {
-                if (autor.getLivrosPublicados().contains(livro.getId())) {
-                    livrosDoAutor.add(livro);
-                }
-            }
-            livrosPorAutor.put(autor.getId(), livrosDoAutor);
-        }
-        model.addAttribute("autores", dados.getAutores());
-        model.addAttribute("livrosPorAutor", livrosPorAutor);
+    @GetMapping 
+    public String inicio(Model model){
+        model.addAttribute("autores", repository.findAll());
         return "autores/inicio";
     }
 
     @GetMapping("/novo")
     public String novoAutor(Model model) {
-        model.addAttribute("autor", new Autor());
-        model.addAttribute("livros", dados.getLivros());
+        model.addAttribute("autores", new Autor());
         return "autores/form";
     }
 
-    @PostMapping
-    public String cadastrarAutor(@ModelAttribute Autor autor) {
-        autor.setId(dados.proximoIdAutor());
-        autor.setLivrosPublicados(livrosValidos(autor.getLivrosPublicados()));
-        dados.getAutores().add(autor);
+    @PostMapping 
+    public String cadastrarAutor(@ModelAttribute Autor autor){
+        repository.save(autor);
         return "redirect:/autores";
     }
 
-    @GetMapping("/editar/{id}")
-    public String editarAutor(@PathVariable Long id, Model model) {
-        for (Autor autor : dados.getAutores()) {
+    @GetMapping ("/editar/{id}")
+    public String editarAutor(@PathVariable Long id, Model model){
+        for (Autor autor : repository.findAll()) {
             if (autor.getId().equals(id)) {
                 model.addAttribute("autor", autor);
-                model.addAttribute("livros", dados.getLivros());
                 return "autores/form";
             }
         }
@@ -72,14 +48,11 @@ public class AutorController {
     }
 
     @PostMapping("/editar/{id}")
-    public String atualizarAutor(
-            @PathVariable Long id,
-            @ModelAttribute Autor autorAtualizado) {
-        for (Autor autor : dados.getAutores()) {
-            if (autor.getId().equals(id)) {
+    public String atualizarAutor(@PathVariable Long id, @ModelAttribute Autor autorAtualizado){
+        for (Autor autor : repository.findAll()){
+            if (autor.getId().equals(id)){
                 autor.setNome(autorAtualizado.getNome());
                 autor.setNacionalidade(autorAtualizado.getNacionalidade());
-                autor.setLivrosPublicados(livrosValidos(autorAtualizado.getLivrosPublicados()));
                 break;
             }
         }
@@ -87,24 +60,8 @@ public class AutorController {
     }
 
     @PostMapping("/excluir/{id}")
-    public String excluirAutor(@PathVariable Long id) {
-        dados.getAutores().removeIf(autor -> autor.getId().equals(id));
+    public String excluirAutor (@PathVariable Long id){
+        repository.deleteById(id);
         return "redirect:/autores";
-    }
-
-    private List<Long> livrosValidos(List<Long> ids) {
-        List<Long> validos = new ArrayList<>();
-        if (ids == null) {
-            return validos;
-        }
-        for (Long id : ids) {
-            for (Livro livro : dados.getLivros()) {
-                if (livro.getId().equals(id)) {
-                    validos.add(id);
-                    break;
-                }
-            }
-        }
-        return validos;
     }
 }
