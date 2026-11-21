@@ -25,7 +25,7 @@ public class CategoriaController {
 
     @GetMapping("/novo")
     public String novaCategoria(Model model) {
-        model.addAttribute("categorias", new Categoria());
+        model.addAttribute("categoria", new Categoria());
         return "categorias/form";
     }
 
@@ -33,12 +33,6 @@ public class CategoriaController {
     public String cadastrarCategoria(@ModelAttribute Categoria categoria) {
         repository.save(categoria);
         return "redirect:/categorias";
-    }
-
-    @GetMapping ("/categorias")
-    public String listarCategorias(Model model) {
-        model.addAttribute("categorias", repository.findAll());
-        return "categorias/inicio";
     }
 
     @GetMapping ("/editar/{id}")
@@ -57,6 +51,7 @@ public class CategoriaController {
         for (Categoria categoria : repository.findAll()) {
             if (categoria.getId().equals(id)){
                 categoria.setNome(categoriaAtualizada.getNome());
+                repository.save(categoria);
                 break;
             }
         }

@@ -16,12 +16,6 @@
         <a th:href="@{/categorias}">
             Categorias
         </a>
-        <a th:href="@{/usuarios}">
-            Usuários
-        </a>
-        <a th:href="@{/emprestimos}">
-            Empréstimos
-        </a>
     </nav>
 
     <form th:object="${livro}"
@@ -31,13 +25,29 @@
 
       <input type="text" th:field="*{titulo}" />
 
-      <label>Autor:</label>
-
-      <input type="text" th:field="*{autor}" />
+      <label for="autorId">Autor:</label>
+      <select id="autorId" th:field="*{autorId}" required>
+        <option value="">Selecione um autor</option>
+        <option th:each="autor : ${autores}"
+                th:value="${autor.id}"
+                th:text="${autor.nome}"></option>
+      </select>
 
       <label>ISBN:</label>
 
       <input type="text" th:field="*{isbn}" />
+
+      <label for="categoriaId">Categoria:</label>
+      <select id="categoriaId" th:field="*{categoriaId}" required>
+        <option value="">Selecione uma categoria</option>
+        <option th:each="categoria : ${categorias}"
+                th:value="${categoria.id}"
+                th:text="${categoria.nome}"></option>
+      </select>
+
+      <p th:if="${#lists.isEmpty(autores)}">Cadastre um autor antes de cadastrar um livro.</p>
+      <p th:if="${#lists.isEmpty(categorias)}">Cadastre uma categoria antes de cadastrar um livro.</p>
+      <p th:if="${erro}" th:text="${erro}"></p>
 
       <button type="submit" th:text="${livro.id == null} ? 'Cadastrar' : 'Salvar'">Cadastrar</button>
     </form>

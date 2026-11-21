@@ -15,12 +15,6 @@
         <a th:href="@{/categorias}">
             Categorias
         </a>
-        <a th:href="@{/usuarios}">
-            Usuários
-        </a>
-        <a th:href="@{/emprestimos}">
-            Empréstimos
-        </a>
     </nav>
 
     <p><a th:href="@{/livros/novo}">Cadastrar Livro</a></p>
@@ -32,6 +26,7 @@
             <tr>
                 <th>Título</th>
                 <th>Autor</th>
+                <th>Categoria</th>
                 <th>ISBN</th>
                 <th>Ações</th>
             </tr>
@@ -39,8 +34,10 @@
         <tbody>
             <tr th:each="livro : ${livros}">
                 <td th:text="${livro.titulo}"></td>
-                <td th:text="${livro.autor}"></td>
+                <td th:text="${autoresPorId[livro.autorId]}"></td>
+                <td th:text="${categoriasPorId[livro.categoriaId]}"></td>
                 <td th:text="${livro.isbn}"></td>
+                <td th:text="${livro.quantidade}"></td>
                 <td>
                     <a th:href="@{/livros/editar/{id}(id=${livro.id})}">Editar</a>
                     <form th:action="@{/livros/excluir/{id}(id=${livro.id})}" method="post">

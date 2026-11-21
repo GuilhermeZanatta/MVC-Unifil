@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Cadastro</title>
+  </head>
+  <body>
+    <h1 th:text="${categoria.id == null} ? 'Cadastrar Categoria' : 'Editar Categoria'">Cadastrar Categoria</h1>
+
+    <nav>
+        <a th:href="@{/livros}">Livros</a>
+        <a th:href="@{/autores}">Autores</a>
+        <a th:href="@{/categorias}">Categorias</a>
+    </nav>
+
+    <form th:object="${categoria}"
+          th:action="${categoria.id == null} ? @{/categorias} : @{/categorias/editar/{id}(id=${categoria.id})}"
+          method="post">
+      <label>Nome:</label>
+      <input type="text" th:field="*{nome}" required />
+
+      <button type="submit" th:text="${categoria.id == null} ? 'Cadastrar' : 'Salvar'">Cadastrar</button>
+    </form>
+  </body>
+</html>

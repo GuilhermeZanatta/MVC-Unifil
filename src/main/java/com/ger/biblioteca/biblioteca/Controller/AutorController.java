@@ -1,11 +1,18 @@
 package com.ger.biblioteca.biblioteca.Controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.ger.biblioteca.biblioteca.Model.Autor;
+import com.ger.biblioteca.biblioteca.Model.Livro;
 import com.ger.biblioteca.biblioteca.Repository.AutoresRepository;
+import com.ger.biblioteca.biblioteca.Repository.LivrosRepository;
 
 
 @Controller
@@ -13,27 +20,42 @@ import com.ger.biblioteca.biblioteca.Repository.AutoresRepository;
 public class AutorController {
 
     private final AutoresRepository repository;
+    private final LivrosRepository livrosRepository;
 
-    public AutorController(AutoresRepository repository) {
+    public AutorController(AutoresRepository repository, LivrosRepository livrosRepository) {
         this.repository = repository;
+        this.livrosRepository = livrosRepository;
     }
 
     @GetMapping 
     public String inicio(Model model){
-        model.addAttribute("autores", repository.findAll());
+        List<Autor> autores = repository.findAll();
+        Map<Long, List<Livro>> livrosPorAutor = new HashMap<>();
+        for (Autor autor : autores) {
+            livrosPorAutor.put(autor.getId(), new ArrayList<>());
+        }
+        for (Livro livro : livrosRepository.findAll()) {
+            List<Livro> livrosDoAutor = livrosPorAutor.get(livro.getAutorId());
+            if (livrosDoAutor != null) {
+                livrosDoAutor.add(livro);
+            }
+        }
+        model.addAttribute("autores", autores);
+        model.addAttribute("livrosPorAutor", livrosPorAutor);
         return "autores/inicio";
     }
 
     @GetMapping("/novo")
     public String novoAutor(Model model) {
-        model.addAttribute("autores", new Autor());
+        model.addAttribute("autor", new Autor());
         return "autores/form";
     }
 
     @PostMapping 
-    public String cadastrarAutor(@ModelAttribute Autor autor){
+    public String cadastrarAutor(@ModelAttribute Autor autor, Model model){
         repository.save(autor);
-        return "redirect:/autores";
+        model.addAttribute("autor", autor);
+        return "autores/confirmacao";
     }
 
     @GetMapping ("/editar/{id}")
@@ -53,6 +75,7 @@ public class AutorController {
             if (autor.getId().equals(id)){
                 autor.setNome(autorAtualizado.getNome());
                 autor.setNacionalidade(autorAtualizado.getNacionalidade());
+                repository.save(autor);
                 break;
             }
         }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns="...">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <title>Confirmação</title>
   </head>
@@ -16,12 +16,6 @@
         <a th:href="@{/categorias}">
             Categorias
         </a>
-        <a th:href="@{/usuarios}">
-            Usuários
-        </a>
-        <a th:href="@{/emprestimos}">
-            Empréstimos
-        </a>
     </nav>
 
     <p>
@@ -31,7 +25,12 @@
 
     <p>
       Autor:
-      <span th:text="${livro.autor}"></span>
+      <span th:text="${nomeAutor}"></span>
+    </p>
+
+    <p>
+      Categoria:
+      <span th:text="${nomeCategoria}"></span>
     </p>
 
     <p>

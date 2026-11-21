@@ -16,12 +16,6 @@
         <a th:href="@{/categorias}">
             Categorias
         </a>
-        <a th:href="@{/usuarios}">
-            Usuários
-        </a>
-        <a th:href="@{/emprestimos}">
-            Empréstimos
-        </a>
     </nav>
 
     <form th:object="${autor}"
@@ -35,14 +29,6 @@
 
       <input type="text" th:field="*{nacionalidade}" />
 
-      <label for="livrosPublicados">Livros publicados (selecione vários):</label>
-      <select id="livrosPublicados" th:field="*{livrosPublicados}" multiple size="5">
-        <option th:each="livro : ${livros}"
-                th:value="${livro.id}"
-                th:text="${livro.titulo + ' - ' + livro.autor}"></option>
-      </select>
-
-      <p th:if="${#lists.isEmpty(livros)}">Cadastre livros antes de associá-los ao autor.</p>
       <button type="submit" th:text="${autor.id == null} ? 'Cadastrar' : 'Salvar'">Cadastrar</button>
     </form>
   </body>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Categorias</title>
+</head>
+<body>
+    <h1>Sistema de Biblioteca</h1>
+    <nav>
+        <a th:href="@{/livros}">Livros</a>
+        <a th:href="@{/autores}">Autores</a>
+        <a th:href="@{/categorias}">Categorias</a>
+    </nav>
+
+    <p><a th:href="@{/categorias/novo}">Cadastrar Categoria</a></p>
+
+    <h2>Categorias cadastradas</h2>
+    <p th:if="${#lists.isEmpty(categorias)}">Nenhuma categoria cadastrada.</p>
+    <table th:unless="${#lists.isEmpty(categorias)}" border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="categoria : ${categorias}">
+                <td th:text="${categoria.nome}"></td>
+                <td>
+                    <a th:href="@{/categorias/editar/{id}(id=${categoria.id})}">Editar</a>
+                    <form th:action="@{/categorias/excluir/{id}(id=${categoria.id})}" method="post">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
